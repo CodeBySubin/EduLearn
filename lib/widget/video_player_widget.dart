@@ -1,9 +1,8 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:lms_project/model/video_model.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-//video player widget for playing video
+
 class VideoPlayerWidget extends StatefulWidget {
   const VideoPlayerWidget({
     super.key,
@@ -20,6 +19,8 @@ class VideoPlayerWidget extends StatefulWidget {
 
 class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   late final WebViewController _controller;
+  bool isLoading = true;
+  String? errorMessage;
 
   @override
   void initState() {
@@ -28,6 +29,29 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
         WebViewController()
           ..setJavaScriptMode(JavaScriptMode.unrestricted)
           ..loadRequest(_videoPage(widget.videoId, widget.platform));
+
+    if (WebViewPlatform.instance != null) {
+      _controller.setNavigationDelegate(
+        NavigationDelegate(
+          onPageStarted: (String url) {
+            setState(() {
+              isLoading = true; 
+            });
+          },
+          onPageFinished: (String url) {
+            setState(() {
+              isLoading = false; 
+            });
+          },
+          onWebResourceError: (WebResourceError error) {
+            setState(() {
+              errorMessage = error.description;
+              isLoading = false; 
+            });
+          },
+        ),
+      );
+    }
   }
 
   @override
@@ -40,7 +64,24 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return WebViewWidget(controller: _controller);
+    return isLoading
+        ? Center(child: CircularProgressIndicator())
+        : errorMessage == null
+        ? WebViewWidget(controller: _controller)
+        : Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.error, color: Colors.red, size: 50),
+              SizedBox(height: 10),
+              Text(
+                'Error: $errorMessage',
+                style: TextStyle(color: Colors.red, fontSize: 16),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        );
   }
 
   /// Generates the appropriate video player page (Vimeo or YouTube)

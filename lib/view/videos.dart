@@ -51,14 +51,11 @@ class _VideosState extends State<Videos> {
             padding: const EdgeInsets.all(2.0),
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    height: height * 0.28,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: OptimizedVideoPlayer(video: viewModel.videwModel!),
-                    ),
+                SizedBox(
+                  height: height * 0.28,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: OptimizedVideoPlayer(video: viewModel.videwModel!),
                   ),
                 ),
                 Expanded(
@@ -67,7 +64,7 @@ class _VideosState extends State<Videos> {
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () {
-                          viewModel.updateVideo(viewModel.videwModel!);
+                          viewModel.updateVideo(viewModel.videolist[index]);
                         },
 
                         child: Card(
@@ -88,16 +85,9 @@ class _VideosState extends State<Videos> {
                               children: [
                                 CircleAvatar(
                                   backgroundColor: Colors.red,
-                                  child: IconButton(
-                                    icon: const Icon(
-                                      Icons.play_arrow,
-                                      color: Colors.white,
-                                    ),
-                                    onPressed: () {
-                                      viewModel.updateVideo(
-                                        viewModel.videolist[index],
-                                      );
-                                    },
+                                  child: Icon(
+                                    Icons.play_arrow,
+                                    color: Colors.white,
                                   ),
                                 ),
                                 Expanded(
