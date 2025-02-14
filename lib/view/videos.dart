@@ -54,7 +54,7 @@ class _VideosState extends State<Videos> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SizedBox(
-                    height: height * 0.3,
+                    height: height * 0.28,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: OptimizedVideoPlayer(video: viewModel.videwModel!),

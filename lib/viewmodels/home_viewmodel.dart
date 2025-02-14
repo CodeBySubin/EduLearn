@@ -12,7 +12,8 @@ class HomeViewModel extends ChangeNotifier {
   bool isLoading = false;
   List<Homemodel> homelsit = [];
   String? errorMessage;
-
+  
+//Fetching data from api
   Future<void> fetchHome() async {
     isLoading = true;
     notifyListeners();

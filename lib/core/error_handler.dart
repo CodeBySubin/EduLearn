@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-
+//Dio error handling
 class DioExceptionHandler {
   static String handleDioError(DioException error) {
     switch (error.type) {

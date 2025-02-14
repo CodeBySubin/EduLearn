@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:lms_project/model/video_model.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-
+//video player widget for playing video
 class VideoPlayerWidget extends StatefulWidget {
   const VideoPlayerWidget({
     super.key,

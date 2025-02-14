@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lms_project/core/colors.dart';
-import 'package:lms_project/model/subject_model.dart';
+import 'package:lms_project/model/module_model.dart';
 import 'package:lms_project/view/videos.dart';
 import 'package:lms_project/viewmodels/modules_viewmodel.dart';
 import 'package:lms_project/widget/error_widget.dart';

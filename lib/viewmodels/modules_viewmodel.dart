@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:lms_project/core/api_client.dart';
 import 'package:lms_project/core/constants.dart';
 import 'package:lms_project/core/error_handler.dart';
-import 'package:lms_project/model/subject_model.dart';
+import 'package:lms_project/model/module_model.dart';
 
 class ModulesViewmodel extends ChangeNotifier {
   final apiClient = ApiClient();
