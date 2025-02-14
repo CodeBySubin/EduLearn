@@ -12,7 +12,8 @@ class HomeViewModel extends ChangeNotifier {
   bool isLoading = false;
   List<Homemodel> homelsit = [];
   String? errorMessage;
-  
+    int currentIndex = 0;
+
 //Fetching data from api
   Future<void> fetchHome() async {
     isLoading = true;
@@ -31,5 +32,9 @@ class HomeViewModel extends ChangeNotifier {
       isLoading = false;
       notifyListeners();
     }
+  }
+    void updateIndex(int index) {
+    currentIndex = index;
+    notifyListeners();  
   }
 }

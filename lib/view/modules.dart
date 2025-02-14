@@ -68,7 +68,7 @@ class ModulesItem extends StatelessWidget {
             );
           },
           child: Card(
-            color: AppColors.gradient_top,
+            color: AppColors.cardcolor,
             margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
             child: Stack(
               children: [
@@ -105,9 +105,7 @@ class ModulesItem extends StatelessWidget {
                                 context,
                               ).textTheme.titleMedium!.copyWith(
                                 fontWeight: FontWeight.bold,
-                                color: const Color(
-                                  0xFF333333,
-                                ), 
+                                color: const Color(0xFF333333),
                               ),
                             ),
                           ),
@@ -116,9 +114,7 @@ class ModulesItem extends StatelessWidget {
                       Text(
                         modules[index].description,
                         style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          color: const Color(
-                            0xFF4B4B4B,
-                          ), 
+                          color: const Color(0xFF4B4B4B),
                         ),
                       ),
                     ],

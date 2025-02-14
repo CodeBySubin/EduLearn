@@ -104,27 +104,63 @@ class CarouselSliderWidget extends StatelessWidget {
       'https://i.pinimg.com/736x/c3/a4/f0/c3a4f0d06287de60c85859cb3e6c21d0.jpg',
     ];
 
-    return CarouselSlider.builder(
-      itemCount: imgList.length,
-      itemBuilder: (context, index, realIndex) {
-        return Container(
-          margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: networkImageWidget(
-              imgList[index],
-            ),
+    return Consumer<HomeViewModel>(
+      builder: (context, viewModel, child) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Column(
+            spacing: 5,
+            children: [
+              CarouselSlider.builder(
+                itemCount: imgList.length,
+                itemBuilder: (context, index, realIndex) {
+                  return Container(
+                    margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.network(
+                        imgList[index],
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                      ),
+                    ),
+                  );
+                },
+                options: CarouselOptions(
+                  height: 220,
+                  autoPlay: true,
+                  enlargeCenterPage: true,
+                  aspectRatio: 16 / 9,
+                  viewportFraction: 1.0,
+                  enableInfiniteScroll: true,
+                  onPageChanged: (index, reason) {
+                    viewModel.updateIndex(index);
+                  },
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  imgList.length,
+                  (index) => AnimatedContainer(
+                    duration: Duration(milliseconds: 300),
+                    margin: EdgeInsets.symmetric(horizontal: 3),
+                    height: 8,
+                    width: 8,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color:
+                          viewModel.currentIndex == index
+                              ? AppColors.colorprimary
+                              : AppColors.gradient_top,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         );
       },
-      options: CarouselOptions(
-        height: 220,
-        autoPlay: true,
-        enlargeCenterPage: true,
-        aspectRatio: 16 / 9,
-        viewportFraction: 1.0,
-        enableInfiniteScroll: true,
-      ),
     );
   }
 }

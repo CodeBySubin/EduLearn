@@ -75,7 +75,7 @@ class _VideosState extends State<Videos> {
                             borderRadius: BorderRadius.circular(50),
                           ),
 
-                          color: AppColors.gradient_top,
+                          color: AppColors.cardcolor,
                           elevation: 0,
                           margin: const EdgeInsets.symmetric(
                             vertical: 8,
