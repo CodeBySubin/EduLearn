@@ -23,7 +23,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  int _selectedIndex = 0;
 
   @override
   void initState() {
@@ -42,6 +41,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = Provider.of<HomeViewModel>(context);
+
     return Scaffold(
       backgroundColor: Color(0xFFF8F9FB),
       appBar: AppBar(
@@ -92,8 +93,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   // Get the screen based on selected index
   Widget _getSelectedScreen() {
-    print(_selectedIndex);
-    switch (_selectedIndex) {
+    final viewModel = Provider.of<HomeViewModel>(context);
+
+    switch (viewModel.selectedIndex) {
       case 0:
         return _buildHomeContent();
       case 1:
@@ -176,44 +178,53 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   Widget _buildNavItem(int index, IconData icon, String label) {
-    final isSelected = _selectedIndex == index;
-    return InkWell(
-      onTap: () {
-        setState(() {
-          _selectedIndex = index;
-        });
-      },
-      borderRadius: BorderRadius.circular(16),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, color: isSelected ? Color(0xFF1E3A8A) : Colors.grey)
-                .animate(target: isSelected ? 1 : 0)
-                .scale(
-                  begin: Offset(1, 1),
-                  end: Offset(1.2, 1.2),
-                  duration: 300.ms,
-                )
-                .then(delay: 100.ms)
-                .scale(
-                  begin: Offset(1.2, 1.2),
-                  end: Offset(1, 1),
-                  duration: 300.ms,
-                ),
-            SizedBox(height: 4),
-            Text(
-              label,
-              style: GoogleFonts.poppins(
-                fontSize: 12,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                color: isSelected ? Color(0xFF1E3A8A) : Colors.grey,
-              ),
+    return Consumer<HomeViewModel>(
+      builder: (context, viewModel, child) {
+        final isSelected = viewModel.selectedIndex == index;
+
+        return InkWell(
+          onTap: () {
+            viewModel.updateSelectedIndex(index);
+          },
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 12.0,
+              vertical: 8.0,
             ),
-          ],
-        ),
-      ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                      icon,
+                      color: isSelected ? const Color(0xFF1E3A8A) : Colors.grey,
+                    )
+                    .animate(target: isSelected ? 1 : 0)
+                    .scale(
+                      begin: const Offset(1, 1),
+                      end: const Offset(1.2, 1.2),
+                      duration: 300.ms,
+                    )
+                    .then(delay: 100.ms)
+                    .scale(
+                      begin: const Offset(1.2, 1.2),
+                      end: const Offset(1, 1),
+                      duration: 300.ms,
+                    ),
+                const SizedBox(height: 4),
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                    color: isSelected ? const Color(0xFF1E3A8A) : Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
