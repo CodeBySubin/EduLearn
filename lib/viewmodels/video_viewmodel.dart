@@ -10,7 +10,7 @@ class VideoViewmodel extends ChangeNotifier {
   final apiClient = ApiClient();
   bool isLoading = false;
   List<Videomodel> videolist = [];
-  String? errorMessage;
+  Errors? errorMessage;
   Videomodel? videwModel;
   bool isFullScreen = false;
 
@@ -30,7 +30,7 @@ class VideoViewmodel extends ChangeNotifier {
         videwModel = videolist.first;
       }
     } on DioException catch (e) {
-      errorMessage = DioExceptionHandler.handleDioError(e).toString();
+      errorMessage = DioExceptionHandler.handleDioError(e);
     } finally {
       isLoading = false;
       notifyListeners();

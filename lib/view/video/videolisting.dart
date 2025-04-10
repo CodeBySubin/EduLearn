@@ -52,7 +52,13 @@ class _VideoListPageState extends State<VideoListPage> {
             return loader();
           }
           if (viewModel.errorMessage != null) {
-            return errorWidget(viewModel.errorMessage!);
+            return buildErrorWidget(
+              context: context,
+              message:viewModel.errorMessage!,
+              onRetry: () {
+                viewModel.fetchvideos(widget.module.id);
+              },
+            );
           }
           return Column(
             children: [

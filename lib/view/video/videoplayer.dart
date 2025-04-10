@@ -57,11 +57,11 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       caseSensitive: false,
     );
     final match = regExp.firstMatch(url);
-    
+
     if (match != null && match.groupCount >= 1) {
       return match.group(1) ?? '';
     }
-    
+
     // If we can't extract the ID, return the full URL
     // The Vimeo player will try to handle it
     return url;
@@ -79,16 +79,16 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.video.title)
-            .animate()
-            .fadeIn(duration: const Duration(milliseconds: 500)),
+        title: Text(
+          widget.video.title,
+        ).animate().fadeIn(duration: const Duration(milliseconds: 500)),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ).animate().scale(
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.easeInOut,
-            ),
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeInOut,
+        ),
       ),
       body: Consumer<VideoViewmodel>(
         builder: (context, viewModel, child) {
@@ -96,7 +96,13 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
             return loader();
           }
           if (viewModel.errorMessage != null) {
-            return errorWidget(viewModel.errorMessage!);
+            return buildErrorWidget(
+              context: context,
+              message: viewModel.errorMessage!,
+              onRetry: () {
+                Navigator.of(context).pop();
+              },
+            );
           }
 
           return SingleChildScrollView(
@@ -105,24 +111,26 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
               children: [
                 // Video Player with animation
                 AspectRatio(
-                  aspectRatio: 16 / 9,
-                  child: _isYouTube
-                      ? YoutubePlayer(
-                          controller: _youtubeController,
-                          showVideoProgressIndicator: true,
-                          progressIndicatorColor: Colors.blue,
-                          progressColors: const ProgressBarColors(
-                            playedColor: Colors.blue,
-                            handleColor: Colors.blueAccent,
-                          ),
-                        )
-                      : VimeoPlayer(
-                          videoId: _vimeoVideoId,
-                        ),
-                )
+                      aspectRatio: 16 / 9,
+                      child:
+                          _isYouTube
+                              ? YoutubePlayer(
+                                controller: _youtubeController,
+                                showVideoProgressIndicator: true,
+                                progressIndicatorColor: Colors.blue,
+                                progressColors: const ProgressBarColors(
+                                  playedColor: Colors.blue,
+                                  handleColor: Colors.blueAccent,
+                                ),
+                              )
+                              : VimeoPlayer(videoId: _vimeoVideoId),
+                    )
                     .animate()
                     .fadeIn(duration: const Duration(milliseconds: 800))
-                    .scale(begin: const Offset(0.95, 0.95), end: const Offset(1, 1)),
+                    .scale(
+                      begin: const Offset(0.95, 0.95),
+                      end: const Offset(1, 1),
+                    ),
 
                 // Video information
                 Padding(
@@ -131,12 +139,12 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.video.title,
-                        style: GoogleFonts.poppins(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )
+                            widget.video.title,
+                            style: GoogleFonts.poppins(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
                           .animate()
                           .fadeIn(
                             delay: const Duration(milliseconds: 300),
@@ -145,22 +153,24 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                           .slideX(begin: 0.2, end: 0),
                       const SizedBox(height: 8),
                       Row(
-                        children: [
-                          Icon(
-                            _isYouTube ? Icons.videocam : Icons.video_library,
-                            size: 16,
-                            color: Colors.grey[600],
-                          ),
-                          const SizedBox(width: 6),
-                          Text(
-                            _isYouTube ? 'YouTube' : 'Vimeo',
-                            style: GoogleFonts.poppins(
-                              fontSize: 14,
-                              color: Colors.grey[700],
-                            ),
-                          ),
-                        ],
-                      )
+                            children: [
+                              Icon(
+                                _isYouTube
+                                    ? Icons.videocam
+                                    : Icons.video_library,
+                                size: 16,
+                                color: Colors.grey[600],
+                              ),
+                              const SizedBox(width: 6),
+                              Text(
+                                _isYouTube ? 'YouTube' : 'Vimeo',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 14,
+                                  color: Colors.grey[700],
+                                ),
+                              ),
+                            ],
+                          )
                           .animate()
                           .fadeIn(
                             delay: const Duration(milliseconds: 400),
@@ -177,12 +187,12 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                           .slideY(begin: 0.2, end: 0),
                       const SizedBox(height: 16),
                       Text(
-                        'Description',
-                        style: GoogleFonts.poppins(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      )
+                            'Description',
+                            style: GoogleFonts.poppins(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          )
                           .animate()
                           .fadeIn(
                             delay: const Duration(milliseconds: 600),
@@ -191,13 +201,13 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                           .slideX(begin: 0.2, end: 0),
                       const SizedBox(height: 8),
                       Text(
-                        widget.video.description,
-                        style: GoogleFonts.poppins(
-                          fontSize: 14,
-                          color: Colors.grey[700],
-                          height: 1.5,
-                        ),
-                      )
+                            widget.video.description,
+                            style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              color: Colors.grey[700],
+                              height: 1.5,
+                            ),
+                          )
                           .animate()
                           .fadeIn(
                             delay: const Duration(milliseconds: 700),
@@ -208,12 +218,12 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
 
                       // Related videos
                       Text(
-                        'Related Videos',
-                        style: GoogleFonts.poppins(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      )
+                            'Related Videos',
+                            style: GoogleFonts.poppins(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          )
                           .animate()
                           .fadeIn(
                             delay: const Duration(milliseconds: 800),
@@ -244,97 +254,100 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       itemBuilder: (context, index) {
         final video = relatedVideos[index];
         return GestureDetector(
-          onTap: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => VideoPlayerPage(video: video),
-              ),
-            );
-          },
-          child: Container(
-            margin: const EdgeInsets.only(bottom: 12),
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha:0.05),
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Row(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.network(
-                    getVideoThumbnail(video.videoUrl),
-                    width: 120,
-                    height: 70,
-                    fit: BoxFit.cover,
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => VideoPlayerPage(video: video),
                   ),
-                )
-                    .animate()
-                    .fadeIn(duration: const Duration(milliseconds: 400))
-                    .scale(
-                      begin: const Offset(0.95, 0.95),
-                      end: const Offset(1, 1),
+                );
+              },
+              child: Container(
+                margin: const EdgeInsets.only(bottom: 12),
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.05),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
                     ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        video.title,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          Icon(
-                            video.videoType == VideoType.YOU_TUBE
-                                ? Icons.videocam
-                                : Icons.video_library,
-                            size: 16,
-                            color: Colors.grey[600],
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.network(
+                            getVideoThumbnail(video.videoUrl),
+                            width: 120,
+                            height: 70,
+                            fit: BoxFit.cover,
                           ),
-                          const SizedBox(width: 6),
+                        )
+                        .animate()
+                        .fadeIn(duration: const Duration(milliseconds: 400))
+                        .scale(
+                          begin: const Offset(0.95, 0.95),
+                          end: const Offset(1, 1),
+                        ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                           Text(
-                            video.videoType == VideoType.YOU_TUBE
-                                ? 'YouTube'
-                                : 'Vimeo',
+                            video.title,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.poppins(
                               fontSize: 14,
-                              color: Colors.grey[700],
+                              fontWeight: FontWeight.w500,
                             ),
+                          ),
+                          const SizedBox(height: 4),
+                          Row(
+                            children: [
+                              Icon(
+                                video.videoType == VideoType.YOU_TUBE
+                                    ? Icons.videocam
+                                    : Icons.video_library,
+                                size: 16,
+                                color: Colors.grey[600],
+                              ),
+                              const SizedBox(width: 6),
+                              Text(
+                                video.videoType == VideoType.YOU_TUBE
+                                    ? 'YouTube'
+                                    : 'Vimeo',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 14,
+                                  color: Colors.grey[700],
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-        )
+              ),
+            )
             .animate()
             .fadeIn(
               delay: Duration(milliseconds: 900 + (index * 200)),
               duration: const Duration(milliseconds: 500),
             )
             .slideY(begin: 0.2, end: 0)
-            .animate(onPlay: (controller) => controller.repeat(reverse: true, count: 1))
+            .animate(
+              onPlay:
+                  (controller) => controller.repeat(reverse: true, count: 1),
+            )
             .shimmer(
-              color: Colors.blue.withValues(alpha:0.1),
+              color: Colors.blue.withValues(alpha: 0.1),
               size: 0.9,
               duration: const Duration(milliseconds: 1500),
             );

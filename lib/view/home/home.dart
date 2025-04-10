@@ -41,8 +41,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = Provider.of<HomeViewModel>(context);
-
     return Scaffold(
       backgroundColor: Color(0xFFF8F9FB),
       appBar: AppBar(
@@ -80,7 +78,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               context: context,
               message: viewModel.errorMessage!,
               onRetry: () {
-                Provider.of<HomeViewModel>(context, listen: false).fetchHome();
+                viewModel.fetchHome();
               },
             );
           }

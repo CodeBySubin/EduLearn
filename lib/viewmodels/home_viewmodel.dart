@@ -11,7 +11,7 @@ class HomeViewModel extends ChangeNotifier {
   final apiClient = ApiClient();
   bool isLoading = false;
   List<Homemodel> homelsit = [];
-  String? errorMessage;
+  Errors? errorMessage;
   int selectedIndex = 0;
 
   //Fetching data from api
@@ -27,7 +27,7 @@ class HomeViewModel extends ChangeNotifier {
                 .toList();
       }
     } on DioException catch (e) {
-      errorMessage = DioExceptionHandler.handleDioError(e).toString();
+      errorMessage = DioExceptionHandler.handleDioError(e);
     } finally {
       isLoading = false;
       notifyListeners();

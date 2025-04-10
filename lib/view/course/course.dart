@@ -14,14 +14,6 @@ class Course extends StatefulWidget {
 }
 
 class _CourseState extends State<Course> {
-  //   @override
-  // void initState() {
-  //   super.initState();
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-  //     Provider.of<HomeViewModel>(context, listen: false).fetchHome();
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Consumer<HomeViewModel>(

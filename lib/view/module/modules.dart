@@ -54,7 +54,13 @@ class _ModulesPageState extends State<ModulesPage> {
             return loader();
           }
           if (viewModel.errorMessage != null) {
-            return errorWidget(viewModel.errorMessage!);
+            return buildErrorWidget(
+              context: context,
+              message:viewModel.errorMessage!,
+              onRetry: () {
+                viewModel.fetchModules(widget.module.id);
+              },
+            );
           }
           return SingleChildScrollView(
             child: Padding(

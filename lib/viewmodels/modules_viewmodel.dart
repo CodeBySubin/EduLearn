@@ -11,7 +11,7 @@ class ModulesViewmodel extends ChangeNotifier {
   final apiClient = ApiClient();
   bool isLoading = false;
   List<ModuleModel> modulelist = [];
-  String? errorMessage;
+  Errors? errorMessage;
 
   Future<void> fetchModules(int id) async {
     isLoading = true;
@@ -28,7 +28,7 @@ class ModulesViewmodel extends ChangeNotifier {
                 .toList();
       }
     } on DioException catch (e) {
-      errorMessage = DioExceptionHandler.handleDioError(e).toString();
+      errorMessage = DioExceptionHandler.handleDioError(e);
     } finally {
       isLoading = false;
       notifyListeners();

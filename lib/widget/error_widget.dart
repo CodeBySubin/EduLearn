@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lms_project/core/network/dio_exception.dart';
 
-Widget errorWidget(String text) {
-  return Center(
-    child: Text(text, style: const TextStyle(color: Colors.red, fontSize: 16)),
-  );
-}
+
 
 Widget buildErrorWidget({
   required BuildContext context,
-  required String message,
+  required Errors message,
   required VoidCallback onRetry,
 }) {
   return Center(
@@ -38,7 +35,7 @@ Widget buildErrorWidget({
         const SizedBox(height: 8),
 
         Text(
-          message,
+          message.message,
           style: GoogleFonts.poppins(
             fontSize: 14,
             color: Colors.grey[700],
