@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
-import 'package:lms_project/core/api_client.dart';
-import 'package:lms_project/core/constants.dart';
-import 'package:lms_project/core/error_handler.dart';
+import 'package:lms_project/core/network/api_client.dart';
+import 'package:lms_project/core/network/api_endpoint.dart';
+import 'package:lms_project/core/network/dio_exception.dart';
 import 'package:lms_project/model/module_model.dart';
 
 class ModulesViewmodel extends ChangeNotifier {
@@ -28,7 +28,7 @@ class ModulesViewmodel extends ChangeNotifier {
                 .toList();
       }
     } on DioException catch (e) {
-      errorMessage = DioExceptionHandler.handleDioError(e);
+      errorMessage = DioExceptionHandler.handleDioError(e).toString();
     } finally {
       isLoading = false;
       notifyListeners();

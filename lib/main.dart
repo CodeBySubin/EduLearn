@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lms_project/core/colors.dart';
-import 'package:lms_project/core/constants.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lms_project/view/splash.dart';
 import 'package:lms_project/viewmodels/home_viewmodel.dart';
 import 'package:lms_project/viewmodels/modules_viewmodel.dart';
@@ -14,12 +13,11 @@ void main() {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  runApp(const MyApp());
+  runApp(const EducationalApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+class EducationalApp extends StatelessWidget {
+  const EducationalApp({super.key});
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -29,23 +27,24 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => VideoViewmodel()),
       ],
       child: MaterialApp(
+        title: 'Educational Platform',
         debugShowCheckedModeBanner: false,
-        title: StringConstants.appname,
         theme: ThemeData(
+          primarySwatch: Colors.blue,
+          scaffoldBackgroundColor: Colors.grey[50],
           appBarTheme: AppBarTheme(
+            backgroundColor: Colors.white,
+            foregroundColor: Colors.black,
             elevation: 0,
-            centerTitle: true,
-            titleTextStyle: TextStyle(
-              color: AppColors.white,
+            titleTextStyle: GoogleFonts.poppins(
+              color: Colors.black,
               fontSize: 20,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
             ),
-            backgroundColor: AppColors.colorprimary,
           ),
-          colorScheme: ColorScheme.fromSeed(seedColor: AppColors.colorprimary),
-          useMaterial3: true,
+          textTheme: GoogleFonts.poppinsTextTheme(),
         ),
-        home: const Splash(),
+        home: const SplashScreen(),
       ),
     );
   }

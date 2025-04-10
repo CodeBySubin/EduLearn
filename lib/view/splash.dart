@@ -1,94 +1,144 @@
 import 'package:flutter/material.dart';
-import 'package:lms_project/core/colors.dart';
-import 'package:lms_project/core/constants.dart';
-import 'package:lms_project/view/home.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:lms_project/core/utils/string_constants.dart';
+import 'dart:async';
+import 'package:lms_project/view/home/home.dart';
 
-class Splash extends StatefulWidget {
-  const Splash({super.key});
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
 
   @override
-  State<Splash> createState() => _SplashState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashState extends State<Splash> {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Set up animations
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    );
+
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: const Interval(0.0, 0.65, curve: Curves.easeInOut),
+      ),
+    );
+
+    _scaleAnimation = Tween<double>(begin: 0.6, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: const Interval(0.0, 0.65, curve: Curves.easeInOut),
+      ),
+    );
+
+    // Start animation and navigation
+    _animationController.forward();
+
+    // Navigate to home screen after delay
+    Timer(const Duration(milliseconds: 2500), () {
+      Navigator.of(context).pushReplacement(
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => const Home(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            var fadeTransition = Tween<double>(
+              begin: 0.0,
+              end: 1.0,
+            ).animate(animation);
+            return FadeTransition(opacity: fadeTransition, child: child);
+          },
+          transitionDuration: const Duration(milliseconds: 800),
+        ),
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final double screenHeight = MediaQuery.of(context).size.height;
-    final double screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       body: Container(
-        width: double.infinity,
-        height: double.infinity,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [AppColors.gradient_top, AppColors.gradient_top],
+            colors: [Colors.blue.shade700, Colors.blue.shade900],
           ),
         ),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: screenHeight * 0.75,
-                child: Image.asset(AssetPaths.splash, fit: BoxFit.contain),
-              ),
-
-              SizedBox(height: screenHeight * 0.01),
-              Text(
-                StringConstants.splash_description,
-                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                  color: AppColors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              ),
-
-              SizedBox(height: screenHeight * 0.06),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => Home()),
-                    (Route<dynamic> route) => false,
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+        child: SafeArea(
+          child: Center(
+            child: AnimatedBuilder(
+              animation: _animationController,
+              builder: (context, child) {
+                return Opacity(
+                  opacity: _fadeAnimation.value,
+                  child: Transform.scale(
+                    scale: _scaleAnimation.value,
+                    child: child,
                   ),
-                  elevation: 0,
-                ),
-                child: Ink(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        AppColors.gradient_button_top,
-                        AppColors.gradient_button_bottom,
+                );
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 120,
+                    height: 120,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(24),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha:0.2),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
+                        ),
                       ],
                     ),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  child: Container(
-                    width: screenWidth * 0.8,
-                    height: screenHeight * 0.06,
-                    alignment: Alignment.center,
-                    child: Text(
-                      StringConstants.startnow,
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        color: AppColors.white,
-                        fontWeight: FontWeight.bold,
+                    child: Center(
+                      child: Icon(
+                        Icons.school_rounded,
+                        size: 70,
+                        color: Colors.blue.shade700,
                       ),
                     ),
                   ),
-                ),
+                  const SizedBox(height: 30),
+                  Text(
+                    StringConstants.splash_description,
+                    style: GoogleFonts.poppins(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    StringConstants.splash_description_two,
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      color: Colors.white.withValues(alpha:0.9),
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),

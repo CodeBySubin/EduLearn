@@ -1,13 +1,12 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
-import 'package:lms_project/core/api_client.dart';
-import 'package:lms_project/core/constants.dart';
-import 'package:lms_project/core/error_handler.dart';
+import 'package:lms_project/core/network/api_client.dart';
+import 'package:lms_project/core/network/api_endpoint.dart';
+import 'package:lms_project/core/network/dio_exception.dart';
 import 'package:lms_project/model/video_model.dart';
 
 class VideoViewmodel extends ChangeNotifier {
-  bool isVimeo = false;
   final apiClient = ApiClient();
   bool isLoading = false;
   List<Videomodel> videolist = [];
@@ -31,18 +30,10 @@ class VideoViewmodel extends ChangeNotifier {
         videwModel = videolist.first;
       }
     } on DioException catch (e) {
-      errorMessage = DioExceptionHandler.handleDioError(e);
+      errorMessage = DioExceptionHandler.handleDioError(e).toString();
     } finally {
       isLoading = false;
       notifyListeners();
     }
-  }
-
-  Future<void> updateVideo(Videomodel video) async {
-    if (videwModel?.videoUrl == video.videoUrl) {
-      return;
-    }
-    videwModel = video;
-    notifyListeners();
   }
 }

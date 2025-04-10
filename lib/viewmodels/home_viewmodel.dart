@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
-import 'package:lms_project/core/api_client.dart';
-import 'package:lms_project/core/constants.dart';
-import 'package:lms_project/core/error_handler.dart';
+import 'package:lms_project/core/network/api_client.dart';
+import 'package:lms_project/core/network/api_endpoint.dart';
+import 'package:lms_project/core/network/dio_exception.dart';
 import 'package:lms_project/model/home_model.dart';
 
 class HomeViewModel extends ChangeNotifier {
@@ -12,9 +12,9 @@ class HomeViewModel extends ChangeNotifier {
   bool isLoading = false;
   List<Homemodel> homelsit = [];
   String? errorMessage;
-    int currentIndex = 0;
+  int currentIndex = 0;
 
-//Fetching data from api
+  //Fetching data from api
   Future<void> fetchHome() async {
     isLoading = true;
     notifyListeners();
@@ -27,14 +27,20 @@ class HomeViewModel extends ChangeNotifier {
                 .toList();
       }
     } on DioException catch (e) {
-      errorMessage = DioExceptionHandler.handleDioError(e);
+      errorMessage = DioExceptionHandler.handleDioError(e).toString();
     } finally {
       isLoading = false;
       notifyListeners();
     }
   }
-    void updateIndex(int index) {
-    currentIndex = index;
-    notifyListeners();  
+
+
+    int _selectedIndex = 0;
+
+  int get selectedIndex => _selectedIndex;
+
+  void updateSelectedIndex(int index) {
+    _selectedIndex = index;
+    notifyListeners();
   }
 }

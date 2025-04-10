@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lms_project/core/colors.dart';
+import 'package:lms_project/core/utils/colors.dart';
 
 class GradientAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;

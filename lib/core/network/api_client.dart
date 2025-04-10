@@ -1,17 +1,18 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:lms_project/core/constants.dart';
-//Api client
+import 'package:lms_project/core/network/api_endpoint.dart';
+
 class ApiClient {
+  static final ApiClient _instance = ApiClient._internal();
   late final Dio _dio;
 
-  ApiClient() {
+  /// **Private Constructor (Singleton Pattern)**
+  ApiClient._internal() {
     _dio = Dio(
       BaseOptions(
         baseUrl: APIConfig.baseURL,
         connectTimeout: const Duration(seconds: 10),
         receiveTimeout: const Duration(seconds: 10),
-        
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json",
@@ -27,13 +28,15 @@ class ApiClient {
           return handler.next(options);
         },
         onResponse: (response, handler) {
-          debugPrint("[API RESPONSE] ${response.statusCode} → ${response.requestOptions.uri}");
+          debugPrint(
+              "[API RESPONSE] ${response.statusCode} → ${response.requestOptions.uri}");
           return handler.next(response);
         },
         onError: (DioException e, handler) {
           debugPrint("[API ERROR] ${e.message}");
           if (e.response != null) {
-            debugPrint("[ERROR DETAILS] ${e.response?.statusCode} → ${e.response?.data}");
+            debugPrint(
+                "[ERROR DETAILS] ${e.response?.statusCode} → ${e.response?.data}");
           }
           return handler.next(e);
         },
@@ -41,13 +44,16 @@ class ApiClient {
     );
   }
 
+  /// **Public factory constructor**
+  factory ApiClient() => _instance;
+
   /// **GET Request**
   Future<Response> get(String endpoint, {Map<String, dynamic>? params}) async {
-      return await _dio.get(endpoint, queryParameters: params);
+    return await _dio.get(endpoint, queryParameters: params);
   }
-  
+
   /// **POST Request**
   Future<Response> post(String endpoint, {dynamic data}) async {
-      return await _dio.post(endpoint, data: data);
+    return await _dio.post(endpoint, data: data);
   }
 }
